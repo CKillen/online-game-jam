@@ -8,8 +8,9 @@ public class BushController : MonoBehaviour
     private bool shaking = false;
     // Start is called before the first frame update
     void Start()
-    {
-        shake = gameObject.GetComponent<Animator>();
+    {   
+        shake = gameObject.GetComponentInParent<Animator>();
+        transform.SetParent(transform, true);
     }
 
     // Update is called once per frame
