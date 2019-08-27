@@ -10,7 +10,7 @@ public class BushController : MonoBehaviour
     void Start()
     {   
         shake = gameObject.GetComponentInParent<Animator>();
-        transform.SetParent(transform, true);
+        transform.parent.transform.position = transform.position;
     }
 
     // Update is called once per frame
