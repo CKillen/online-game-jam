@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour
 {
     public float moveSpeed;
     private Animator player;
+    private bool attacking = false;
+    public Rigidbody2D body;
     
 
     // Start is called before the first frame update
@@ -20,6 +22,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Fire1"))
         {
             player.SetBool("attack", true);
+            attacking = true;
+            StartCoroutine("Attacking");
         }
     }
 
@@ -53,9 +57,20 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    public bool getAttackState()
+    {
+        return attacking;
+    }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("entered");
+        //Debug.Log("entered");
+    }
+
+    IEnumerator Attacking()
+    {
+        yield return new WaitForSeconds(0.3f);
+        attacking = false;
     }
 }

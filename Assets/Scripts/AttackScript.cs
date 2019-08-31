@@ -25,7 +25,7 @@ public class AttackScript : MonoBehaviour
     {
         if(attacking == true && collision.gameObject.tag == "Enemy")
         {
-            Debug.Log(collision.gameObject.name);
+           // Debug.Log(collision.gameObject.name);
         }
     }
 
