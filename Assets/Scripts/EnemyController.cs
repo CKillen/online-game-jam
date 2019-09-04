@@ -7,6 +7,7 @@ public class EnemyController : MonoBehaviour
     private bool hit = false;
     public Rigidbody2D body;
     private Animator enemy;
+    private bool attacking = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,21 +17,13 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        Debug.Log("here");
-        if(collision.gameObject.GetComponent<PlayerController>().getAttackState() && hit == false)
-        {
-            Vector2 difference = collision.gameObject.transform.position - gameObject.transform.position;
-            hit = true;
-            Debug.Log("hit");
-            IEnumerator knockback = Knockback(difference);
-            StartCoroutine(knockback);
-            StartCoroutine("HitReset");
-        }
+        
+
         
     }
 
@@ -49,12 +42,34 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(.2f);
         body.velocity = new Vector2(0, 0);
     }
-    
+
+    public bool getAttackState()
+    {
+        return attacking;
+    }
+
+
     IEnumerator HitReset()
     {
         
         yield return new WaitForSeconds(0.3f);
         hit = false;
+    }
+
+    IEnumerator Attacking()
+    {
+        yield return new WaitForSeconds(0.3f);
+        attacking = false;
+    }
+
+    public void Hit(Vector3 position)
+    {
+        Vector2 difference = position - gameObject.transform.position;
+        hit = true;
+        Debug.Log("hit");
+        IEnumerator knockback = Knockback(difference);
+        StartCoroutine(knockback);
+        StartCoroutine("HitReset");
     }
 
 }

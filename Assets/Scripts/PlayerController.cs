@@ -5,10 +5,18 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float moveSpeed;
+    public float attackRange;
+    public int damage;
+    public float attackTimer;
+    private float timeBetweenAttack;
+
+    public LayerMask whatIsEnemy;
+    public Transform attackPos;
     private Animator player;
-    private bool attacking = false;
     public Rigidbody2D body;
-    
+
+    private bool hit = false;
+    private bool attacking = false;
 
     // Start is called before the first frame update
     void Start()
@@ -19,12 +27,30 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Fire1"))
+
+        if(timeBetweenAttack <= 0)
         {
-            player.SetBool("attack", true);
-            attacking = true;
-            StartCoroutine("Attacking");
+            Debug.Log("here");
+            if (Input.GetButtonDown("Fire1"))
+            {
+                Debug.Log("here2");
+                player.SetBool("attack", true);
+                Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemy);
+                for (int i = 0; i < enemiesToDamage.Length; i++)
+                {
+                    enemiesToDamage[i].GetComponent<EnemyController>().Hit(transform.position);
+                    
+                }
+                timeBetweenAttack = attackTimer;
+            }
+            
         }
+        else
+        {
+            timeBetweenAttack -= Time.deltaTime;
+        }
+
+        
     }
 
     private void FixedUpdate()
@@ -57,20 +83,10 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    public bool getAttackState()
+    private void OnDrawGizmosSelected()
     {
-        return attacking;
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(attackPos.position, attackRange);
     }
 
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        //Debug.Log("entered");
-    }
-
-    IEnumerator Attacking()
-    {
-        yield return new WaitForSeconds(0.3f);
-        attacking = false;
-    }
 }
