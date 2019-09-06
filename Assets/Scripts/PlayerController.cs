@@ -10,11 +10,12 @@ public class PlayerController : MonoBehaviour
     public float attackTimer;
     private float timeBetweenAttack;
 
+    public float attackXOffset;
     public LayerMask whatIsEnemy;
-    public Transform attackPos;
     private Animator player;
     public Rigidbody2D body;
 
+    public Transform attackPos;
     private bool hit = false;
     private bool attacking = false;
 
@@ -33,9 +34,9 @@ public class PlayerController : MonoBehaviour
             Debug.Log("here");
             if (Input.GetButtonDown("Fire1"))
             {
-                Debug.Log("here2");
                 player.SetBool("attack", true);
                 Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemy);
+
                 for (int i = 0; i < enemiesToDamage.Length; i++)
                 {
                     enemiesToDamage[i].GetComponent<EnemyController>().Hit(transform.position);
