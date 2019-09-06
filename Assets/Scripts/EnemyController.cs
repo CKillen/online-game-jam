@@ -8,6 +8,11 @@ public class EnemyController : MonoBehaviour
     public Rigidbody2D body;
     private Animator enemy;
     private bool attacking = false;
+    private float timeBetweenAttack;
+    public Transform attackPos;
+    public LayerMask whatIsPlayer;
+    public float attackRange;
+    public float attackTimer;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,59 +22,56 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        
-
-        
-    }
-
-    IEnumerator Knockback(Vector2 difference)
-    {
-        yield return new WaitForSeconds(0.2f);
-        enemy.SetBool("hit", true);
-        if (difference.x > 0)
+        if (timeBetweenAttack <= 0)
         {
-            body.AddForce(new Vector2(-200, (difference.y - .2f) * -150));
+            Debug.Log("here");
+            if (Input.GetButtonDown("Fire1"))
+            {
+                enemy.SetBool("attack", true);
+                Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsPlayer);
+
+                for (int i = 0; i < enemiesToDamage.Length; i++)
+                {
+                    enemiesToDamage[i].GetComponent<PlayerController>().Hit(transform.position);
+                }
+                timeBetweenAttack = attackTimer;
+            }
         }
         else
         {
-            body.AddForce(new Vector2(200, (difference.y - .2f) * -150));
+            timeBetweenAttack -= Time.deltaTime;
+        }
+
+    }
+
+    IEnumerator HitTiming(Vector2 difference)
+    {
+        yield return new WaitForSeconds(0.2f);
+        enemy.SetBool("hit", true);
+        hit = false;
+        if (difference.x > 0)
+        {
+            body.AddForce(new Vector2(-300, (difference.y - .2f) * -150));
+        }
+        else
+        {
+            body.AddForce(new Vector2(300, (difference.y - .2f) * -150));
         }
         yield return new WaitForSeconds(.2f);
         body.velocity = new Vector2(0, 0);
-    }
-
-    public bool getAttackState()
-    {
-        return attacking;
-    }
-
-
-    IEnumerator HitReset()
-    {
-        
-        yield return new WaitForSeconds(0.3f);
-        hit = false;
-    }
-
-    IEnumerator Attacking()
-    {
-        yield return new WaitForSeconds(0.3f);
-        attacking = false;
     }
 
     public void Hit(Vector3 position)
     {
         Vector2 difference = position - gameObject.transform.position;
         hit = true;
-        Debug.Log("hit");
-        IEnumerator knockback = Knockback(difference);
-        StartCoroutine(knockback);
-        StartCoroutine("HitReset");
+        IEnumerator hitTimer = HitTiming(difference);
+        StartCoroutine(hitTimer);
     }
 
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(attackPos.position, attackRange);
+    }
 }
