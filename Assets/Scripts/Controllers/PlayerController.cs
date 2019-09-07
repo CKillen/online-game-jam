@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     private bool attacking = false;
     private Animator player;
     private float timeBetweenAttack;
+    private bool currentlyAttacking = false;
 
     // Start is called before the first frame update
     void Start()
@@ -28,10 +29,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(timeBetweenAttack <= 0)
+        if (timeBetweenAttack <= 0 || currentlyAttacking)
         {
             Debug.Log("here");
-            /*if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonDown("Fire1"))
             {
                 player.SetBool("attack", true);
                 Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsEnemy);
@@ -41,27 +42,27 @@ public class PlayerController : MonoBehaviour
                     enemiesToDamage[i].GetComponent<EnemyController>().Hit(transform.position);
                 }
                 timeBetweenAttack = attackTimer;
-            }*/
+            }
         }
         else
         {
             timeBetweenAttack -= Time.deltaTime;
-        }   
+        }
     }
 
     private void FixedUpdate()
     {
-        if(Input.GetAxisRaw("Horizontal") == 0)
+        if (Input.GetAxisRaw("Horizontal") == 0)
         {
             player.SetBool("moving", false);
         }
-        if(Input.GetAxisRaw("Horizontal") > .5f && canMove && !player.GetBool("attack"))
+        if (Input.GetAxisRaw("Horizontal") > .5f && canMove && !player.GetBool("attack"))
         {
             transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * moveSpeed * Time.deltaTime, 0f, 0f));
             transform.localRotation = Quaternion.Euler(0, 0, 0);
             player.SetBool("moving", true);
         }
-        if(Input.GetAxisRaw("Horizontal") < -.5f && canMove && !player.GetBool("attack"))
+        if (Input.GetAxisRaw("Horizontal") < -.5f && canMove && !player.GetBool("attack"))
         {
             transform.Translate(new Vector3(-1 * Input.GetAxisRaw("Horizontal") * moveSpeed * Time.deltaTime, 0f, 0f));
             transform.localRotation = Quaternion.Euler(0, 180, 0);

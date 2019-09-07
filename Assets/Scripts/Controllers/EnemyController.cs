@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    private bool hit = false;
+    private bool canMove = true;
     public Rigidbody2D body;
     private Animator enemy;
     private bool attacking = false;
@@ -48,7 +48,7 @@ public class EnemyController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.2f);
         enemy.SetBool("hit", true);
-        hit = false;
+        canMove = false;
         if (difference.x > 0)
         {
             body.AddForce(new Vector2(-300, (difference.y - .2f) * -150));
@@ -59,12 +59,12 @@ public class EnemyController : MonoBehaviour
         }
         yield return new WaitForSeconds(.2f);
         body.velocity = new Vector2(0, 0);
+        canMove = true;
     }
 
     public void Hit(Vector3 position)
     {
         Vector2 difference = position - gameObject.transform.position;
-        hit = true;
         IEnumerator hitTimer = HitTiming(difference);
         StartCoroutine(hitTimer);
     }

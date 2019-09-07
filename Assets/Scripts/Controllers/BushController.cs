@@ -8,7 +8,7 @@ public class BushController : MonoBehaviour
     private bool shaking = false;
     // Start is called before the first frame update
     void Start()
-    {   
+    {
         shake = gameObject.GetComponentInParent<Animator>();
         transform.parent.transform.position = transform.position;
     }
@@ -22,6 +22,6 @@ public class BushController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         shake.Play("bushBump");
- 
+
     }
 }
