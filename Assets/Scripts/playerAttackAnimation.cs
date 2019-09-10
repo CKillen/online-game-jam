@@ -1,5 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿/*
+*Copyright (c) ChrisK
+*https://www.youtube.com/channel/UCPu3vmQP5tZ4mnI_E_ezOiQ
+*/
 using UnityEngine;
 
 public class PlayerAttackAnimation : StateMachineBehaviour
