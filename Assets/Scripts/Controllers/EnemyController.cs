@@ -12,13 +12,16 @@ public class EnemyController : MonoBehaviour
     public Rigidbody2D body;
     private Animator enemy;
     private bool attacking = false;
-    private float timeBetweenAttack;
+    public float timeBetweenAttack;
+    public float attackDelayMin = .0f;
+    public float attackDelayMax = .5f;
     public Transform attackPos;
     public LayerMask whatIsPlayer;
     public float attackRange;
     public float attackTimer;
     public float moveSpeed;
     public float lookRadius;
+    private float attackDelay;
     //TODO Move player over to a singleton pattern maybe
     public GameObject player;
     private bool canAttack = true;
@@ -26,12 +29,13 @@ public class EnemyController : MonoBehaviour
     void Start()
     {
         enemy = gameObject.GetComponent<Animator>();
+        attackDelay = Random.Range(attackDelayMin, attackDelayMax);
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        Attack();
     }
 
     private void FixedUpdate()
@@ -72,26 +76,25 @@ public class EnemyController : MonoBehaviour
         Gizmos.DrawWireSphere(gameObject.transform.position, lookRadius);
     }
 
-    // private void Attack()
-    // {
-    //     Debug.Log("attack");
-    //     if (timeBetweenAttack <= 0)
-    //     {
-    //         enemy.SetBool("attack", true);
-    //         Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsPlayer);
+    private void Attack()
+    {
+        if (timeBetweenAttack <= 0)
+        {
+            Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsPlayer);
+            if (enemiesToDamage.Length > 0)
+            {
+                Debug.Log("Attack");
+                StartCoroutine(AttackTiming());
+                timeBetweenAttack = attackTimer;
 
-    //         for (int i = 0; i < enemiesToDamage.Length; i++)
-    //         {
-    //             enemiesToDamage[i].GetComponent<PlayerController>().Hit(transform.position);
-    //         }
-    //         timeBetweenAttack = attackTimer;
-
-    //     }
-    //     else
-    //     {
-    //         timeBetweenAttack -= Time.deltaTime;
-    //     }
-    // }
+            }
+            //StartCoroutine(AttackTiming());
+        }
+        else
+        {
+            timeBetweenAttack -= Time.deltaTime;
+        }
+    }
 
     private void move()
     {
@@ -114,17 +117,6 @@ public class EnemyController : MonoBehaviour
                 }
                 transform.position = Vector2.MoveTowards(transform.position, player.transform.position, moveSpeed * Time.deltaTime);
                 enemy.SetBool("moving", true);
-            }
-            else
-            {
-                //Close enough to Attack
-                if (canAttack)
-                {
-                    Debug.Log("here");
-                    enemy.SetBool("moving", false);
-                    StartCoroutine(Attack());
-                }
-
             }
         }
         else
@@ -159,16 +151,18 @@ public class EnemyController : MonoBehaviour
     }
 
 
-    IEnumerator Attack()
+    IEnumerator AttackTiming()
     {
-        canAttack = false;
-        yield return new WaitForSeconds(1f);
+
+        attackDelay = Random.Range(attackDelayMin, attackDelayMax);
+        yield return new WaitForSeconds(attackDelay);
+        timeBetweenAttack = attackTimer;
         enemy.SetBool("attack", true);
         Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsPlayer);
         for (int i = 0; i < enemiesToDamage.Length; i++)
         {
             enemiesToDamage[i].GetComponent<PlayerController>().Hit(transform.position);
         }
-        canAttack = true;
     }
+
 }

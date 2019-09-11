@@ -51,21 +51,23 @@ public class PlayerController : MonoBehaviour
     IEnumerator HitTiming(Vector2 difference)
     {
         canMove = false;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(.2f);
         player.SetBool("hit", true);
-        hit = false;
+
         body.velocity = new Vector2(0, 0);
         if (difference.x > 0)
         {
-            body.AddForce(new Vector2(-150, (difference.y - .2f) * -150));
+            body.AddForce(new Vector2(-300, (difference.y - .2f) * -150));
         }
         else
         {
-            body.AddForce(new Vector2(150, (difference.y - .2f) * -150));
+            body.AddForce(new Vector2(300, (difference.y - .2f) * -150));
         }
         yield return new WaitForSeconds(.2f);
-        canMove = true;
         body.velocity = new Vector2(0, 0);
+        hit = false;
+        canMove = true;
+
     }
 
     public void Hit(Vector3 position)
