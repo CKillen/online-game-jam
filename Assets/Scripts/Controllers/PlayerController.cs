@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Attack();
+        Debug.Log(body.velocity);
     }
 
     private void FixedUpdate()
@@ -57,11 +58,11 @@ public class PlayerController : MonoBehaviour
         body.velocity = new Vector2(0, 0);
         if (difference.x > 0)
         {
-            body.AddForce(new Vector2(-300, (difference.y - .2f) * -150));
+            body.AddForce(new Vector2(-500, (difference.y - .2f) * -150));
         }
         else
         {
-            body.AddForce(new Vector2(300, (difference.y - .2f) * -150));
+            body.AddForce(new Vector2(500, (difference.y - .2f) * -150));
         }
         yield return new WaitForSeconds(.2f);
         body.velocity = new Vector2(0, 0);
@@ -113,18 +114,21 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetAxisRaw("Horizontal") > .5f && canMove && !player.GetBool("attack"))
         {
+
             transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal") * moveSpeed * Time.deltaTime, 0f, 0f));
             transform.localRotation = Quaternion.Euler(0, 0, 0);
             player.SetBool("moving", true);
         }
         if (Input.GetAxisRaw("Horizontal") < -.5f && canMove && !player.GetBool("attack"))
         {
+
             transform.Translate(new Vector3(-1 * Input.GetAxisRaw("Horizontal") * moveSpeed * Time.deltaTime, 0f, 0f));
             transform.localRotation = Quaternion.Euler(0, 180, 0);
             player.SetBool("moving", true);
         }
         if ((Input.GetAxisRaw("Vertical") > .5f || Input.GetAxisRaw("Vertical") < -.5f) && !player.GetBool("attack") && canMove)
         {
+
             transform.Translate(new Vector3(0f, Input.GetAxisRaw("Vertical") * moveSpeed * Time.deltaTime, 0f));
             player.SetBool("moving", true);
         }

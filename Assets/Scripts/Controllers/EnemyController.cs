@@ -51,14 +51,15 @@ public class EnemyController : MonoBehaviour
 
         if (difference.x > 0)
         {
-            body.AddForce(new Vector2(-300, (difference.y - .2f) * -150));
+            body.AddForce(new Vector2(-500, (difference.y - .2f) * -150));
         }
         else
         {
-            body.AddForce(new Vector2(300, (difference.y - .2f) * -150));
+            body.AddForce(new Vector2(500, (difference.y - .2f) * -150));
         }
-        yield return new WaitForSeconds(.2f);
-        body.velocity = new Vector2(0, 0);
+        yield return new WaitForSeconds(.25f);
+        body.velocity = new Vector3(0, 0, 0);
+        body.angularVelocity = 0f;
         canMove = true;
     }
 
@@ -78,15 +79,14 @@ public class EnemyController : MonoBehaviour
 
     private void Attack()
     {
-        if (timeBetweenAttack <= 0)
+        if (timeBetweenAttack <= 0 && !attacking)
         {
             Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsPlayer);
             if (enemiesToDamage.Length > 0)
             {
                 Debug.Log("Attack");
+                attacking = true;
                 StartCoroutine(AttackTiming());
-                timeBetweenAttack = attackTimer;
-
             }
             //StartCoroutine(AttackTiming());
         }
@@ -105,19 +105,16 @@ public class EnemyController : MonoBehaviour
 
             float xDifference = player.transform.position.x - transform.position.x;
             float yDifference = player.transform.position.y - transform.position.y;
-            if (xDifference > .5f || xDifference < -.5f || yDifference > .5f || yDifference < -.7f)
+            if (xDifference < 0)
             {
-                if (xDifference < 0)
-                {
-                    transform.localRotation = Quaternion.Euler(0, 180, 0);
-                }
-                else
-                {
-                    transform.localRotation = Quaternion.Euler(0, 0, 0);
-                }
-                transform.position = Vector2.MoveTowards(transform.position, player.transform.position, moveSpeed * Time.deltaTime);
-                enemy.SetBool("moving", true);
+                transform.localRotation = Quaternion.Euler(0, 180, 0);
             }
+            else
+            {
+                transform.localRotation = Quaternion.Euler(0, 0, 0);
+            }
+            transform.position = Vector2.MoveTowards(transform.position, player.transform.position, moveSpeed * Time.deltaTime);
+            enemy.SetBool("moving", true);
         }
         else
         {
@@ -156,13 +153,14 @@ public class EnemyController : MonoBehaviour
 
         attackDelay = Random.Range(attackDelayMin, attackDelayMax);
         yield return new WaitForSeconds(attackDelay);
-        timeBetweenAttack = attackTimer;
         enemy.SetBool("attack", true);
+        timeBetweenAttack = attackTimer;
         Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(attackPos.position, attackRange, whatIsPlayer);
         for (int i = 0; i < enemiesToDamage.Length; i++)
         {
             enemiesToDamage[i].GetComponent<PlayerController>().Hit(transform.position);
         }
+        attacking = false;
     }
 
 }

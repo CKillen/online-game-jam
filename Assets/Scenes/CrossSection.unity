@@ -301,11 +301,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   body: {fileID: 452065242}
+  timeBetweenAttack: 0
+  attackDelayMin: 0.25
+  attackDelayMax: 0.73
   attackPos: {fileID: 636782139}
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 512
-  attackRange: 0.36
+  attackRange: 0.3
   attackTimer: 0.3
   moveSpeed: 1.7
   lookRadius: 3
@@ -323,8 +326,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_LinearDrag: 4
+  m_AngularDrag: 4
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -2989,6 +2992,40 @@ PrefabInstance:
     - target: {fileID: 2081438073, guid: 7010470c2b4d18945932b8f39f8c822e, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[6].y
       value: -0.6831555
+      objectReference: {fileID: 0}
+    - target: {fileID: 2081438073, guid: 7010470c2b4d18945932b8f39f8c822e, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 262729720501683284, guid: 7010470c2b4d18945932b8f39f8c822e,
+        type: 3}
+      propertyPath: m_SleepingMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 262729720501683284, guid: 7010470c2b4d18945932b8f39f8c822e,
+        type: 3}
+      propertyPath: m_UseAutoMass
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 262729720501683284, guid: 7010470c2b4d18945932b8f39f8c822e,
+        type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 262729720501683284, guid: 7010470c2b4d18945932b8f39f8c822e,
+        type: 3}
+      propertyPath: m_Simulated
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 262729720501683284, guid: 7010470c2b4d18945932b8f39f8c822e,
+        type: 3}
+      propertyPath: m_LinearDrag
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 262729720501683284, guid: 7010470c2b4d18945932b8f39f8c822e,
+        type: 3}
+      propertyPath: m_AngularDrag
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2081438065, guid: 7010470c2b4d18945932b8f39f8c822e, type: 3}
