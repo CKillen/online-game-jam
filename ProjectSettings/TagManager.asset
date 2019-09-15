@@ -14,8 +14,8 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
+  - hit
+  - player
   - 
   - 
   - 
@@ -47,4 +47,7 @@ TagManager:
     locked: 0
   - name: GameObjects
     uniqueID: 2648103293
+    locked: 0
+  - name: hit
+    uniqueID: 2303801629
     locked: 0
